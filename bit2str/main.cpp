@@ -61,7 +61,8 @@ std::string reg_to_bit_string( T reg, const char *splitter = "-" ) {
 		int64_t b = _pdep_u64( v, mask );
 		b += 0x30303030'30303030;
 		b = _byteswap_uint64( b );
-		memcpy( pbuffer, &b, sizeof( b ) );
+		// memcpy( pbuffer, &b, sizeof( b ) );
+		*reinterpret_cast<int64_t*>(pbuffer) = b;   // memcpy() を使わず、*pbuffer へ b を書き込むことによって b をレジスタのみで完結させる
 		pbuffer += sizeof( b );
 	}
 	return std::string( buffer );
